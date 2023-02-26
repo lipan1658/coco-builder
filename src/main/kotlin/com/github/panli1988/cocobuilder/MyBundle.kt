@@ -1,4 +1,4 @@
-package org.jetbrains.plugins.template
+package com.github.panli1988.cocobuilder
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls
