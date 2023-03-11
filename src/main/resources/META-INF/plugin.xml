@@ -1,18 +1,24 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.panli1988.cocobuilder</id>
-    <name>IntelliJ Platform Plugin coco-builder</name>
+    <name>coco-builder</name>
     <vendor>panli1988</vendor>
 
     <depends>com.intellij.modules.platform</depends>
-
+    <depends>com.intellij.database</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.panli1988.cocobuilder.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.panli1988.cocobuilder.services.MyProjectService"/>
+<!--        <applicationService serviceImplementation="com.github.panli1988.cocobuilder.services.MyApplicationService"/>-->
+<!--        <projectService serviceImplementation="com.github.panli1988.cocobuilder.services.MyProjectService"/>-->
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.panli1988.cocobuilder.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
+<!--        <listener class="com.github.panli1988.cocobuilder.listeners.MyProjectManagerListener"-->
+<!--                  topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
     </applicationListeners>
+    <actions>
+        <action id="com.coco.builder.action.MainAction" class="com.coco.builder.action.MainAction"
+                text="CoCoBuilder">
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>

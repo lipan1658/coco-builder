@@ -22,13 +22,36 @@ group = properties("pluginGroup")
 version = properties("pluginVersion")
 
 // Configure project's dependencies
+//repositories {
+//    maven {
+//        url=uri("http://maven.aliyun.com/nexus/content/groups/public/")
+//    }
+//    mavenCentral()
+//}
+
 repositories {
+    mavenLocal()
+    maven {
+        url = uri("https://maven.aliyun.com/repository/public/")
+    }
     mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly("org.projectlombok:lombok:1.18.26")
+    annotationProcessor("org.projectlombok:lombok:1.18.26")
+    // https://mvnrepository.com/artifact/org.freemarker/freemarker
+    implementation("org.freemarker:freemarker:2.3.32")
+
+
 }
 
 // Set the JVM language level used to build the project. Use Java 11 for 2020.3+, and Java 17 for 2022.2+.
 kotlin {
-    jvmToolchain(11)
+    jvmToolchain(17)
 }
 
 // Configure Gradle IntelliJ Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
@@ -40,6 +63,7 @@ intellij {
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
 }
+
 
 // Configure Gradle Changelog Plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
 changelog {
