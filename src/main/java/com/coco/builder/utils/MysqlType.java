@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
  */
 public enum MysqlType {
 
-    DECIMAL("DECIMAL",Types.DECIMAL, BigDecimal .class),
+    DECIMAL("DECIMAL",Types.DECIMAL, BigDecimal.class),
     DECIMAL_UNSIGNED("DECIMAL UNSIGNED",Types.DECIMAL, BigDecimal.class),
     TINYINT("TINYINT",Types.TINYINT, Integer.class),
     TINYINT_UNSIGNED("TINYINT UNSIGNED",Types.TINYINT, Integer.class),
@@ -32,14 +32,14 @@ public enum MysqlType {
     DOUBLE("DOUBLE",Types.DOUBLE, Double.class),
     DOUBLE_UNSIGNED("DOUBLE UNSIGNED",Types.DOUBLE, Double.class),
     NULL("NULL",Types.NULL, Object.class),
-    TIMESTAMP("TIMESTAMP",Types.TIMESTAMP, Timestamp .class),
+    TIMESTAMP("TIMESTAMP",Types.TIMESTAMP, Timestamp.class),
     BIGINT("BIGINT",Types.BIGINT, Long.class),
-    BIGINT_UNSIGNED("BIGINT UNSIGNED",Types.BIGINT, BigInteger .class),
+    BIGINT_UNSIGNED("BIGINT UNSIGNED",Types.BIGINT, BigInteger.class),
     MEDIUMINT("MEDIUMINT",Types.INTEGER, Integer.class),
     MEDIUMINT_UNSIGNED("MEDIUMINT UNSIGNED",Types.INTEGER, Integer.class),
-    DATE("DATE",Types.DATE, Date .class),
-    TIME("TIME",Types.TIME, Time .class),
-    DATETIME("DATETIME",Types.TIMESTAMP, LocalDateTime .class),
+    DATE("DATE",Types.DATE, Date.class),
+    TIME("TIME",Types.TIME, Time.class),
+    DATETIME("DATETIME",Types.TIMESTAMP, LocalDateTime.class),
     YEAR("YEAR",Types.DATE, Date.class),
     VARCHAR("VARCHAR",Types.VARCHAR, String.class),
     VARBINARY("VARBINARY",Types.VARBINARY, null),
@@ -54,11 +54,13 @@ public enum MysqlType {
     LONGBLOB("LONGBLOB",Types.LONGVARBINARY, null),
     LONGTEXT("LONGTEXT",Types.LONGVARCHAR, String.class),
     BLOB("BLOB",Types.LONGVARBINARY, null),
-        TEXT("TEXT",Types.LONGVARCHAR, String.class),
+    TEXT("TEXT",Types.LONGVARCHAR, String.class),
     CHAR("CHAR",Types.CHAR, String.class),
     BINARY("BINARY",Types.BINARY, null),
     GEOMETRY("GEOMETRY",Types.BINARY, null),
-    UNKNOWN("UNKNOWN",Types.OTHER, null);
+    UNKNOWN("UNKNOWN",Types.OTHER, null),
+    //以上取自mysql8 jar包，以下为新增
+    NUMBERIC("NUMBERIC",Types.NUMERIC, BigDecimal.class);
 
 
     private final String name;

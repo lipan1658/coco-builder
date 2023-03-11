@@ -69,6 +69,8 @@ public class MainUI extends JDialog {
 
     private JCheckBox swaggerCheckBox = new JCheckBox("swagger");
 
+    private JCheckBox schemeCheckBox = new JCheckBox("scheme");
+
     private JLabel removePrefixLabel = new JLabel("remove prefix");
 
     private JTextField removePrefixText = new JTextField();
@@ -80,167 +82,6 @@ public class MainUI extends JDialog {
     private JLabel daoClassLabel = new JLabel("dao suffix");
 
     private JTextField daoClassText = new JTextField("DAO");
-
-
-    public JLabel getTableNameLabel() {
-        return tableNameLabel;
-    }
-
-    public void setTableNameLabel(JLabel tableNameLabel) {
-        this.tableNameLabel = tableNameLabel;
-    }
-
-    public JTextField getTableNameText() {
-        return tableNameText;
-    }
-
-    public void setTableNameText(JTextField tableNameText) {
-        this.tableNameText = tableNameText;
-    }
-
-    public JLabel getModuleNameLabel() {
-        return moduleNameLabel;
-    }
-
-    public void setModuleNameLabel(JLabel moduleNameLabel) {
-        this.moduleNameLabel = moduleNameLabel;
-    }
-
-    public ComboBox<String> getModuleComboBox() {
-        return moduleComboBox;
-    }
-
-    public void setModuleComboBox(ComboBox<String> moduleComboBox) {
-        this.moduleComboBox = moduleComboBox;
-    }
-
-    public JLabel getJavaPathLabel() {
-        return javaPathLabel;
-    }
-
-    public void setJavaPathLabel(JLabel javaPathLabel) {
-        this.javaPathLabel = javaPathLabel;
-    }
-
-    public TextFieldWithBrowseButton getJavaPathText() {
-        return javaPathText;
-    }
-
-    public void setJavaPathText(TextFieldWithBrowseButton javaPathText) {
-        this.javaPathText = javaPathText;
-    }
-
-    public JLabel getXmlPathLabel() {
-        return xmlPathLabel;
-    }
-
-    public void setXmlPathLabel(JLabel xmlPathLabel) {
-        this.xmlPathLabel = xmlPathLabel;
-    }
-
-    public TextFieldWithBrowseButton getXmlPathText() {
-        return xmlPathText;
-    }
-
-    public void setXmlPathText(TextFieldWithBrowseButton xmlPathText) {
-        this.xmlPathText = xmlPathText;
-    }
-
-    public JCheckBox getEntityCheckBox() {
-        return entityCheckBox;
-    }
-
-    public void setEntityCheckBox(JCheckBox entityCheckBox) {
-        this.entityCheckBox = entityCheckBox;
-    }
-
-    public JCheckBox getdaoCheckBox() {
-        return daoCheckBox;
-    }
-
-    public void setdaoCheckBox(JCheckBox daoCheckBox) {
-        this.daoCheckBox = daoCheckBox;
-    }
-
-    public JCheckBox getServiceCheckBox() {
-        return serviceCheckBox;
-    }
-
-    public void setServiceCheckBox(JCheckBox serviceCheckBox) {
-        this.serviceCheckBox = serviceCheckBox;
-    }
-
-    public JCheckBox getControllerCheckBox() {
-        return controllerCheckBox;
-    }
-
-    public void setControllerCheckBox(JCheckBox controllerCheckBox) {
-        this.controllerCheckBox = controllerCheckBox;
-    }
-
-    public JCheckBox getXmlCheckBox() {
-        return xmlCheckBox;
-    }
-
-    public void setXmlCheckBox(JCheckBox xmlCheckBox) {
-        this.xmlCheckBox = xmlCheckBox;
-    }
-
-    public JCheckBox getSwaggerCheckBox() {
-        return swaggerCheckBox;
-    }
-
-    public void setSwaggerCheckBox(JCheckBox swaggerCheckBox) {
-        this.swaggerCheckBox = swaggerCheckBox;
-    }
-
-    public JLabel getRemovePrefixLabel() {
-        return removePrefixLabel;
-    }
-
-    public void setRemovePrefixLabel(JLabel removePrefixLabel) {
-        this.removePrefixLabel = removePrefixLabel;
-    }
-
-    public JTextField getRemovePrefixText() {
-        return removePrefixText;
-    }
-
-    public void setRemovePrefixText(JTextField removePrefixText) {
-        this.removePrefixText = removePrefixText;
-    }
-
-    public JLabel getDaoPackageLabel() {
-        return daoPackageLabel;
-    }
-
-    public void setDaoPackageLabel(JLabel daoPackageLabel) {
-        this.daoPackageLabel = daoPackageLabel;
-    }
-
-    public JTextField getDaoPackageText() {
-        return daoPackageText;
-    }
-
-    public void setDaoPackageText(JTextField daoPackageText) {
-        this.daoPackageText = daoPackageText;
-    }
-
-    public JLabel getDaoClassLabel() {
-        return daoClassLabel;
-    }
-
-    public void setDaoClassLabel(JLabel daoClassLabel) {
-        this.daoClassLabel = daoClassLabel;
-    }
-
-    public JTextField getDaoClassText() {
-        return daoClassText;
-    }
-
-    public void setDaoClassText(JTextField daoClassText) {
-        this.daoClassText = daoClassText;
-    }
 
     public MainUI(AnActionEvent anActionEvent) throws SQLException, RemoteException {
         setSize(450, 450);
@@ -329,15 +170,16 @@ public class MainUI extends JDialog {
         tablePanel.add(xmlPathLabel);
         tablePanel.add(xmlPathText);
 
-        JPanel checkBoxPanel = new JPanel(new GridLayout(2, 3, 2, 5));
+        JPanel checkBoxPanel = new JPanel(new GridLayout(3, 3, 2, 5));
         checkBoxPanel.setSize(new Dimension(255, 60));
         checkBoxPanel.setLocation(100, 150);
-        entityCheckBox = new JCheckBox("entity");
-        daoCheckBox = new JCheckBox("dao");
-        serviceCheckBox = new JCheckBox("service");
-        controllerCheckBox = new JCheckBox("controller");
-        xmlCheckBox = new JCheckBox("xml");
-        swaggerCheckBox = new JCheckBox("swagger");
+//        entityCheckBox = new JCheckBox("entity");
+//        daoCheckBox = new JCheckBox("dao");
+//        serviceCheckBox = new JCheckBox("service");
+//        controllerCheckBox = new JCheckBox("controller");
+//        xmlCheckBox = new JCheckBox("xml");
+//        schemeCheckBox = new JCheckBox("scheme");
+//        swaggerCheckBox = new JCheckBox("swagger");
 
         checkBoxPanel.add(entityCheckBox);
         checkBoxPanel.add(daoCheckBox);
@@ -345,6 +187,7 @@ public class MainUI extends JDialog {
         checkBoxPanel.add(controllerCheckBox);
         checkBoxPanel.add(xmlCheckBox);
         checkBoxPanel.add(swaggerCheckBox);
+        checkBoxPanel.add(schemeCheckBox);
 
         JPanel configPanel = new JPanel(new GridLayout(3, 2, 5, 5));
         configPanel.setSize(new Dimension(300, 90));
@@ -384,7 +227,6 @@ public class MainUI extends JDialog {
         buttonPanel.add(okBtn);
         buttonPanel.add(cancelBtn);
 
-
         Container container = getContentPane();
         container.setLayout(null);
         container.add(tablePanel);
@@ -406,7 +248,7 @@ public class MainUI extends JDialog {
         String javaPath = javaPathText.getText();
         String basePackage = javaPath.substring(javaPath.indexOf("java") + 5).replace("\\", ".");
         String xmlPath = xmlPathText.getText();
-        String baseXmlPath = javaPath.substring(xmlPath.indexOf("resources") + 10);
+//        String baseXmlPath = javaPath.substring(xmlPath.indexOf("resources") + 10);
         for (DasColumn column : columns) {
             entityFieldModel = new EntityFieldModel();
             entityFieldModel.setComment(column.getComment());
@@ -417,10 +259,12 @@ public class MainUI extends JDialog {
                 entityFieldModel.setPrimary(true);
             }
             MysqlType mysqlType = CommonUtil.getMysqlType(column.getDataType().typeName);
-            assert mysqlType != null;
-            entityFieldModel.setJavaType(mysqlType.getJavaClass().getSimpleName());
-            entityFieldModel.setFullJavaType(mysqlType.getJavaClass().getCanonicalName());
-            entityFieldModelList.add(entityFieldModel);
+            //无法映射的字段，不处理
+            if(mysqlType != null){
+                entityFieldModel.setJavaType(mysqlType.getJavaClass().getSimpleName());
+                entityFieldModel.setFullJavaType(mysqlType.getJavaClass().getCanonicalName());
+                entityFieldModelList.add(entityFieldModel);
+            }
         }
         String humpClassName = CommonUtil.lineToHump(tableNameText.getText().replace(removePrefixText.getText() == null ? "" : removePrefixText.getText(), ""));
         String baseClassName = humpClassName.substring(0, 1).toUpperCase() + humpClassName.substring(1);
@@ -441,15 +285,11 @@ public class MainUI extends JDialog {
             }
         }
 
-        System.out.println("entityModel=" + entityModel);
-
         DAOModel daoModel = new DAOModel();
         daoModel.setName(baseClassName + daoClassText.getText());
         daoModel.setPackageName(basePackage + "." + daoPackageText.getText());
         daoModel.setFullName(daoModel.getPackageName() + "." + daoModel.getName());
         daoModel.setTypeName(daoPackageText.getText());
-
-        System.out.println("daoModel=" + daoModel);
 
         ServiceModel serviceModel = new ServiceModel();
         serviceModel.setName(baseClassName + "ServiceImpl");
@@ -459,14 +299,10 @@ public class MainUI extends JDialog {
         serviceModel.setFullName(serviceModel.getPackageName() + "." + serviceModel.getName());
         serviceModel.setInterfaceFullName(serviceModel.getInterfacePackageName() + "." + serviceModel.getInterfaceName());
 
-        System.out.println("serviceModel=" + serviceModel);
-
         ControllerModel controllerModel = new ControllerModel();
         controllerModel.setName(baseClassName + "Controller");
         controllerModel.setPackageName(basePackage + ".controller");
         controllerModel.setFullName(controllerModel.getPackageName() + "." + controllerModel.getName());
-
-        System.out.println("controllerModel=" + controllerModel);
 
         TableModel tableModel = new TableModel();
         tableModel.setName(dbTable.getName());
@@ -475,13 +311,13 @@ public class MainUI extends JDialog {
         tableModel.setScheme(currentRootNamespace == null ? null : currentRootNamespace.getName());
 
 
-        Map<String, Boolean> generateMap = new HashMap<>();
-        generateMap.put("dao",daoCheckBox.isSelected());
-        generateMap.put("service",serviceCheckBox.isSelected());
-        generateMap.put("controller",controllerCheckBox.isSelected());
-        generateMap.put("xml",xmlCheckBox.isSelected());
-        generateMap.put("swagger",swaggerCheckBox.isSelected());
-        generateMap.put("entity",entityCheckBox.isSelected());
+//        Map<String, Boolean> generateMap = new HashMap<>();
+//        generateMap.put("dao",daoCheckBox.isSelected());
+//        generateMap.put("service",serviceCheckBox.isSelected());
+//        generateMap.put("controller",controllerCheckBox.isSelected());
+//        generateMap.put("xml",xmlCheckBox.isSelected());
+//        generateMap.put("swagger",swaggerCheckBox.isSelected());
+//        generateMap.put("entity",entityCheckBox.isSelected());
 
         Map<String,Object> dataMap = new HashMap<>();
         dataMap.put("entity",entityModel);
@@ -489,6 +325,8 @@ public class MainUI extends JDialog {
         dataMap.put("table",tableModel);
         dataMap.put("controller",controllerModel);
         dataMap.put("service",serviceModel);
+        dataMap.put("scheme",schemeCheckBox.isSelected());
+        dataMap.put("swagger",swaggerCheckBox.isSelected());
         String filePath;
         String fileName;
         if(entityCheckBox.isSelected()){
@@ -497,7 +335,8 @@ public class MainUI extends JDialog {
             try {
                 FreeMarkerUtil.createFile("entity", TemplateEnum.ENTITY,filePath, fileName, dataMap);
             } catch (IOException e) {
-                e.printStackTrace();
+                Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
+                return;
             }
         }
         if(xmlCheckBox.isSelected()){
@@ -506,7 +345,8 @@ public class MainUI extends JDialog {
             try {
                 FreeMarkerUtil.createFile("xml", TemplateEnum.XML,filePath, fileName, dataMap);
             } catch (IOException e) {
-                e.printStackTrace();
+                Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
+                return;
             }
         }
         if(daoCheckBox.isSelected()){
@@ -515,7 +355,8 @@ public class MainUI extends JDialog {
             try {
                 FreeMarkerUtil.createFile("dao", TemplateEnum.DAO,filePath, fileName, dataMap);
             } catch (IOException e) {
-                e.printStackTrace();
+                Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
+                return;
             }
         }
 
@@ -528,7 +369,8 @@ public class MainUI extends JDialog {
                 fileName = baseClassName+"ServiceImpl.java";
                 FreeMarkerUtil.createFile("serviceimpl", TemplateEnum.SERVICEIMPL,filePath, fileName, dataMap);
             } catch (IOException e) {
-                e.printStackTrace();
+                Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
+                return;
             }
         }
         if(controllerCheckBox.isSelected()){
@@ -537,12 +379,10 @@ public class MainUI extends JDialog {
             try {
                 FreeMarkerUtil.createFile("controller", TemplateEnum.CONTROLLER,filePath, fileName, dataMap);
             } catch (IOException e) {
-                e.printStackTrace();
+                Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
             }
         }
-
-
-
+        dispose();
     }
 
 }
