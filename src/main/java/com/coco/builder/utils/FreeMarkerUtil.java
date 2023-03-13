@@ -7,6 +7,7 @@ import freemarker.template.TemplateException;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -33,7 +34,7 @@ public class FreeMarkerUtil {
             floder.mkdirs();
         }
         File file = new File(filePath+"\\"+fileName);
-        try (Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)))) {
+        try (Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             template.process(dataMap, out);
         } catch (TemplateException | IOException e) {
             e.printStackTrace();

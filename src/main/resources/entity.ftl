@@ -26,8 +26,8 @@ public class ${entity.name} {
 <#-- 循环类型及属性 -->
 <#list entity.fields as attr>
     /**
-    * ${attr.comment!attr.name}
-    */
+     * ${attr.comment!attr.name}
+     */
 <#if swagger>
     @ApiModelProperty("${attr.comment!attr.name}")
 </#if>

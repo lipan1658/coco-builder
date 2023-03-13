@@ -1,17 +1,18 @@
 package com.coco.builder.ui;
 
 import com.coco.builder.model.*;
-import com.coco.builder.utils.CommonUtil;
-import com.coco.builder.utils.FreeMarkerUtil;
-import com.coco.builder.utils.MysqlType;
-import com.coco.builder.utils.TemplateEnum;
+import com.coco.builder.utils.*;
 import com.intellij.database.model.DasColumn;
-import com.intellij.database.model.DasNamespace;
 import com.intellij.database.psi.DbTable;
 import com.intellij.database.util.*;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.WriteAction;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
+import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -20,16 +21,28 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.vcs.VcsException;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.impl.file.PsiFileImplUtil;
+import com.intellij.psi.impl.file.impl.FileManager;
+import com.intellij.psi.impl.file.impl.FileManagerImpl;
+import com.intellij.psi.impl.source.PsiFileImpl;
+import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.containers.JBIterable;
 import com.intellij.util.ui.JBUI;
+import com.intellij.vcsUtil.VcsFileUtil;
+import com.intellij.vcsUtil.VcsRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -129,6 +142,7 @@ public class MainUI extends JDialog {
                 }
             }
         });
+        moduleComboBox.setSelectedIndex(0);
         javaPathLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         ModuleRootManager instance = ModuleRootManager.getInstance(modules[0]);
         List<VirtualFile> sourceRoots = instance.getSourceRoots(JavaSourceRootType.SOURCE);
@@ -173,13 +187,6 @@ public class MainUI extends JDialog {
         JPanel checkBoxPanel = new JPanel(new GridLayout(3, 3, 2, 5));
         checkBoxPanel.setSize(new Dimension(255, 60));
         checkBoxPanel.setLocation(100, 150);
-//        entityCheckBox = new JCheckBox("entity");
-//        daoCheckBox = new JCheckBox("dao");
-//        serviceCheckBox = new JCheckBox("service");
-//        controllerCheckBox = new JCheckBox("controller");
-//        xmlCheckBox = new JCheckBox("xml");
-//        schemeCheckBox = new JCheckBox("scheme");
-//        swaggerCheckBox = new JCheckBox("swagger");
 
         checkBoxPanel.add(entityCheckBox);
         checkBoxPanel.add(daoCheckBox);
@@ -222,6 +229,7 @@ public class MainUI extends JDialog {
         JButton okBtn = new JButton("ok");
         okBtn.addActionListener(listener -> {
             this.onOk(dbTable);
+            VirtualFileManager.getInstance().refreshWithoutFileWatcher(true);
         });
         buttonPanel.add(okBtn);
         buttonPanel.add(okBtn);
@@ -261,12 +269,14 @@ public class MainUI extends JDialog {
             MysqlType mysqlType = CommonUtil.getMysqlType(column.getDataType().typeName);
             //无法映射的字段，不处理
             if(mysqlType != null){
+                JdbcType jdbcType = JdbcType.forCode(mysqlType.getJdbcType());
+                entityFieldModel.setJdbcType(jdbcType.name());
                 entityFieldModel.setJavaType(mysqlType.getJavaClass().getSimpleName());
                 entityFieldModel.setFullJavaType(mysqlType.getJavaClass().getCanonicalName());
                 entityFieldModelList.add(entityFieldModel);
             }
         }
-        String humpClassName = CommonUtil.lineToHump(tableNameText.getText().replace(removePrefixText.getText() == null ? "" : removePrefixText.getText(), ""));
+        String humpClassName = CommonUtil.lineToHump(tableNameText.getText().replaceFirst(removePrefixText.getText() == null ? "" : removePrefixText.getText(), ""));
         String baseClassName = humpClassName.substring(0, 1).toUpperCase() + humpClassName.substring(1);
 
         EntityModel entityModel = new EntityModel();
@@ -307,17 +317,8 @@ public class MainUI extends JDialog {
         TableModel tableModel = new TableModel();
         tableModel.setName(dbTable.getName());
         tableModel.setComment(dbTable.getComment());
-        DasNamespace currentRootNamespace = dbTable.getDataSource().getModel().getCurrentRootNamespace();
-        tableModel.setScheme(currentRootNamespace == null ? null : currentRootNamespace.getName());
+        tableModel.setScheme(dbTable.getParent().getName());
 
-
-//        Map<String, Boolean> generateMap = new HashMap<>();
-//        generateMap.put("dao",daoCheckBox.isSelected());
-//        generateMap.put("service",serviceCheckBox.isSelected());
-//        generateMap.put("controller",controllerCheckBox.isSelected());
-//        generateMap.put("xml",xmlCheckBox.isSelected());
-//        generateMap.put("swagger",swaggerCheckBox.isSelected());
-//        generateMap.put("entity",entityCheckBox.isSelected());
 
         Map<String,Object> dataMap = new HashMap<>();
         dataMap.put("entity",entityModel);
@@ -329,19 +330,22 @@ public class MainUI extends JDialog {
         dataMap.put("swagger",swaggerCheckBox.isSelected());
         String filePath;
         String fileName;
+
         if(entityCheckBox.isSelected()){
             filePath = javaPath+"\\"+"entity";
             fileName = entityModel.getName()+".java";
             try {
                 FreeMarkerUtil.createFile("entity", TemplateEnum.ENTITY,filePath, fileName, dataMap);
-            } catch (IOException e) {
+            } catch (IOException e ) {
                 Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
                 return;
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
             }
         }
         if(xmlCheckBox.isSelected()){
             filePath = xmlPath;
-            fileName = humpClassName+"Mapper.xml";
+            fileName = baseClassName+"Mapper.xml";
             try {
                 FreeMarkerUtil.createFile("xml", TemplateEnum.XML,filePath, fileName, dataMap);
             } catch (IOException e) {

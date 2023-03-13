@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${dao.fullName}">
     <resultMap id="BaseResultMap" type="${entity.fullName}">
-        <#list entity.fields as attr>
-            <#if attr.primary>
-                <id column="${attr.name}" jdbcType="${attr.javaType?upper_case}" property="${attr.field}" />
-            <#else>
-                <result column="${attr.name}"  jdbcType="${attr.javaType?upper_case}" property="${attr.field}" />
-            </#if>
-        </#list>
+<#list entity.fields as attr>
+    <#if attr.primary>
+        <id column="${attr.name}" property="${attr.field}" jdbcType="${attr.jdbcType}" />
+    <#else>
+        <result column="${attr.name}" property="${attr.field}" jdbcType="${attr.jdbcType}" />
+    </#if>
+</#list>
     </resultMap>
 
     <!--查询单个-->
@@ -31,11 +31,11 @@
 <#list entity.fields as attr>
     <#if attr.fullJavaType == "java.lang.String">
         <if test="${attr.field} != null and test=${attr.field} != ''">
-            and ${entity.primary.name} = <#noparse>#{entity.</#noparse>${entity.primary.field}<#noparse>}</#noparse>
+            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
         </if>
     <#else>
         <if test="${attr.field} != null">
-            and ${entity.primary.name} = <#noparse>#{entity.</#noparse>${entity.primary.field}<#noparse>}</#noparse>
+            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
         </if>
     </#if>
 </#list>
@@ -53,7 +53,7 @@
         <where>
 <#list entity.fields as attr>
     <#if attr.fullJavaType == "java.lang.String">
-        <if test="${attr.field} != null and test=${attr.field} != ''">
+        <if test="${attr.field} != null and ${attr.field} != ''">
             and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
         </if>
     <#else>
@@ -72,7 +72,7 @@
         <where>
 <#list entity.fields as attr>
     <#if attr.fullJavaType == "java.lang.String">
-        <if test="${attr.field} != null and test=${attr.field} != ''">
+        <if test="${attr.field} != null and ${attr.field} != ''">
             and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
         </if>
     <#else>
@@ -108,7 +108,6 @@
     <#list entity.fields as attr>
         ${attr.name} = values(${attr.name})<#if attr_has_next>,</#if>
     </#list>
-
     </insert>
 
     <!--通过主键修改数据-->
@@ -117,7 +116,7 @@
         <set>
 <#list entity.fields as attr>
     <#if attr.fullJavaType == "java.lang.String">
-        <if test="${attr.field} != null and test=${attr.field} != ''">
+        <if test="${attr.field} != null and ${attr.field} != ''">
             ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>,
         </if>
     <#else>

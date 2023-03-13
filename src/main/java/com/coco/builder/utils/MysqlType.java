@@ -39,7 +39,7 @@ public enum MysqlType {
     MEDIUMINT_UNSIGNED("MEDIUMINT UNSIGNED",Types.INTEGER, Integer.class),
     DATE("DATE",Types.DATE, Date.class),
     TIME("TIME",Types.TIME, Time.class),
-    DATETIME("DATETIME",Types.TIMESTAMP, LocalDateTime.class),
+//    DATETIME("DATETIME",Types.TIMESTAMP, LocalDateTime.class),
     YEAR("YEAR",Types.DATE, Date.class),
     VARCHAR("VARCHAR",Types.VARCHAR, String.class),
     VARBINARY("VARBINARY",Types.VARBINARY, null),
@@ -60,6 +60,7 @@ public enum MysqlType {
     GEOMETRY("GEOMETRY",Types.BINARY, null),
     UNKNOWN("UNKNOWN",Types.OTHER, null),
     //以上取自mysql8 jar包，以下为新增
+    DATETIME("DATETIME",Types.TIMESTAMP, Timestamp.class),
     NUMBERIC("NUMBERIC",Types.NUMERIC, BigDecimal.class);
 
 

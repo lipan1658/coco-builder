@@ -22,6 +22,11 @@ public class EntityFieldModel {
     private String name;
 
     /**
+     * 字段类型
+     */
+    private String jdbcType;
+
+    /**
      * java类型
      */
     private String javaType;
