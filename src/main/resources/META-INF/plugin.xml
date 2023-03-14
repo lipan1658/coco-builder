@@ -2,18 +2,41 @@
 <idea-plugin>
     <id>com.github.panli1988.cocobuilder</id>
     <name>coco-builder</name>
-    <vendor>panli1988</vendor>
+    <vendor url="https://github.com/panli1988/coco-builder">panli1988</vendor>
+
+    <description><![CDATA[
+      <tag>Mybatis,code generate,code tools</tag>
+      <h3>English:</h3>
+      <ul>
+      <li>Code generation plug-in developed based on IntelliJ IDEA.</li>
+      <li>Currently, only mysql is supported.</li>
+      <li>Generate mybatis-related code based on Freemarker template, including Entity, DAO, XML, etc.</li>
+      </ul>
+      <h3>中文：</h3>
+      <ul>
+      <li>基于IntelliJ IDEA开发的代码生成插件。</li>
+      <li>目前只支持mysql</li>
+      <li>基于Freemarker模板生成mybatis相关代码，包含Entity、DAO、XML等</li>
+    ]]></description>
+
+
+    <change-notes><![CDATA[
+        <p>0.0.1</p>
+        <ul>
+            <li>Initial version.</li>
+            <li>2.Add MybatisCodeHelperMigrate templates</li>
+        </ul>
+        <ul>
+            <li>初始版本.</li>
+        </ul>
+    ]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.database</depends>
     <extensions defaultExtensionNs="com.intellij">
-<!--        <applicationService serviceImplementation="com.github.panli1988.cocobuilder.services.MyApplicationService"/>-->
-<!--        <projectService serviceImplementation="com.github.panli1988.cocobuilder.services.MyProjectService"/>-->
     </extensions>
 
     <applicationListeners>
-<!--        <listener class="com.github.panli1988.cocobuilder.listeners.MyProjectManagerListener"-->
-<!--                  topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
     </applicationListeners>
     <actions>
         <action id="com.coco.builder.action.MainAction" class="com.coco.builder.action.MainAction"
