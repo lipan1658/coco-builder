@@ -3,9 +3,9 @@
     <id>com.github.panli1988.cocobuilder</id>
     <name>coco-builder</name>
     <vendor url="https://github.com/panli1988/coco-builder">panli1988</vendor>
-
+    <idea-version
+            since-build="222" until-build="222.*"/>
     <description><![CDATA[
-      <tag>Mybatis,code generate,code tools</tag>
       <h3>English:</h3>
       <ul>
       <li>Code generation plug-in developed based on IntelliJ IDEA.</li>
@@ -17,17 +17,14 @@
       <li>基于IntelliJ IDEA开发的代码生成插件。</li>
       <li>目前只支持mysql</li>
       <li>基于Freemarker模板生成mybatis相关代码，包含Entity、DAO、XML等</li>
+      </ul>
     ]]></description>
 
 
     <change-notes><![CDATA[
-        <p>0.0.1</p>
+        <h2>0.0.1</h2>
         <ul>
-            <li>Initial version.</li>
-            <li>2.Add MybatisCodeHelperMigrate templates</li>
-        </ul>
-        <ul>
-            <li>初始版本.</li>
+            <li>Generate code from template.</li>
         </ul>
     ]]></change-notes>
 
