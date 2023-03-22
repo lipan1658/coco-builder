@@ -33,12 +33,20 @@ public interface ${dao.name} {
     List<${entity.name}> queryAllByLimit(@Param("entity") ${entity.name} ${entity.name?uncap_first}, @Param("offset") int offset, @Param("limit") int limit);
 
     /**
+    * 查询数据
+    *
+    * @param ${entity.name?uncap_first} 查询条件
+    * @return 对象列表
+    */
+    List<${entity.name}> queryAll(${entity.name} ${entity.name?uncap_first});
+
+    /**
     * 统计总行数
     *
     * @param ${entity.name?uncap_first} 查询条件
     * @return 总行数
     */
-    long count(@Param("entity") ${entity.name} ${entity.name?uncap_first});
+    long count(${entity.name} ${entity.name?uncap_first});
 
     /**
     * 新增数据
@@ -46,7 +54,7 @@ public interface ${dao.name} {
     * @param ${entity.name?uncap_first}) 实例对象
     * @return 影响行数
     */
-    int insert(@Param("entity") ${entity.name} ${entity.name?uncap_first});
+    int insert(${entity.name} ${entity.name?uncap_first});
 
     /**
     * 批量新增数据（MyBatis原生foreach方法）

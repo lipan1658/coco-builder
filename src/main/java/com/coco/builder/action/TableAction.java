@@ -11,7 +11,14 @@ import com.intellij.psi.PsiElement;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
 
-public class MainAction extends AnAction {
+public class TableAction extends AnAction {
+
+    public TableAction() {
+    }
+
+    public TableAction(String text) {
+        super(text);
+    }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
