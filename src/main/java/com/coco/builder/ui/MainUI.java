@@ -135,6 +135,8 @@ public class MainUI extends JDialog {
                 List<VirtualFile> sourceRoots = instance.getSourceRoots(JavaSourceRootType.SOURCE);
                 if (sourceRoots.size() > 0) {
                     javaPathText.setText(sourceRoots.get(0).getPath().replace("/", "\\"));
+                }else{
+                    javaPathText.setText("");
                 }
                 List<VirtualFile> resourceRoots = instance.getSourceRoots(JavaResourceRootType.RESOURCE);
                 if (resourceRoots.size() > 0) {
@@ -148,12 +150,14 @@ public class MainUI extends JDialog {
         List<VirtualFile> sourceRoots = instance.getSourceRoots(JavaSourceRootType.SOURCE);
         if (sourceRoots.size() > 0) {
             javaPathText.setText(sourceRoots.get(0).getPath().replace("/", "\\"));
+        }else{
+            javaPathText.setText("");
         }
         javaPathText.addBrowseFolderListener(new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor(), project) {
             @Override
             protected void onFileChosen(@NotNull VirtualFile chosenFile) {
                 if (chosenFile.isDirectory()) {
-                    super.onFileChosen(chosenFile);
+                    javaPathText.setText(chosenFile.getPath().replace("/", "\\"));
                 } else {
                     Messages.showMessageDialog("Please select a folder", "Notice", Messages.getInformationIcon());
                 }
@@ -168,7 +172,7 @@ public class MainUI extends JDialog {
             @Override
             protected void onFileChosen(@NotNull VirtualFile chosenFile) {
                 if (chosenFile.isDirectory()) {
-                    super.onFileChosen(chosenFile);
+                    xmlPathText.setText(chosenFile.getPath().replace("/", "\\"));
                 } else {
                     Messages.showMessageDialog("Please select a folder", "Notice", Messages.getInformationIcon());
                 }
@@ -339,8 +343,6 @@ public class MainUI extends JDialog {
             } catch (IOException e ) {
                 Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
                 return;
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
             }
         }
         if(xmlCheckBox.isSelected()){

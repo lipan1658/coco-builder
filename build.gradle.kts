@@ -46,6 +46,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.freemarker/freemarker
     implementation("org.freemarker:freemarker:2.3.32")
     implementation("org.jetbrains:marketplace-zip-signer:0.1.8")
+    implementation("com.github.jsqlparser:jsqlparser:4.6")
+
 
 
 }

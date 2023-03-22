@@ -36,9 +36,18 @@
     <applicationListeners>
     </applicationListeners>
     <actions>
-        <action id="com.coco.builder.action.MainAction" class="com.coco.builder.action.MainAction"
-                text="CoCoBuilder">
+<!--        <action id="com.coco.builder.action.TableAction" class="com.coco.builder.action.TableAction"-->
+<!--                text="CoCoBuilder">-->
+<!--            <add-to-group group-id="DatabaseViewPopupMenu" anchor="last"/>-->
+<!--        </action>-->
+<!--        <action id="com.coco.builder.action.SqlAction" class="com.coco.builder.action.SqlAction"-->
+<!--                text="TableAction">-->
+<!--            <add-to-group group-id="DatabaseViewPopupMenu" anchor="last"/>-->
+<!--        </action>-->
+        <group id="com.coco.builder.action.MainActionGroup" class="com.coco.builder.action.MainActionGroup" text="CoCoBuilder"
+               popup="true">
+            <!--生成代码菜单-->
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="last"/>
-        </action>
+        </group>
     </actions>
 </idea-plugin>

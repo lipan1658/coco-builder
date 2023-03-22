@@ -28,17 +28,17 @@
         </#list>
         from <#if scheme=true>`${table.scheme}`.</#if>${table.name}
         <where>
-<#list entity.fields as attr>
-    <#if attr.fullJavaType == "java.lang.String">
-        <if test="${attr.field} != null and test=${attr.field} != ''">
-            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
-        </if>
-    <#else>
-        <if test="${attr.field} != null">
-            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
-        </if>
-    </#if>
-</#list>
+    <#list entity.fields as attr>
+        <#if attr.fullJavaType == "java.lang.String">
+            <if test="${attr.field} != null and test=${attr.field} != ''">
+                and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
+            </if>
+        <#else>
+            <if test="${attr.field} != null">
+                and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
+            </if>
+        </#if>
+    </#list>
         </where>
         limit <#noparse>#{offset}</#noparse>, <#noparse>#{limit}</#noparse>
     </select>
@@ -51,17 +51,17 @@
         </#list>
         from <#if scheme=true>`${table.scheme}`.</#if>${table.name}
         <where>
-<#list entity.fields as attr>
-    <#if attr.fullJavaType == "java.lang.String">
-        <if test="${attr.field} != null and ${attr.field} != ''">
-            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
-        </if>
-    <#else>
-        <if test="${attr.field} != null">
-            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
-        </if>
-    </#if>
-</#list>
+    <#list entity.fields as attr>
+        <#if attr.fullJavaType == "java.lang.String">
+            <if test="${attr.field} != null and ${attr.field} != ''">
+                and ${attr.name} = <#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse>
+            </if>
+        <#else>
+            <if test="${attr.field} != null">
+                and ${attr.name} = <#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse>
+            </if>
+        </#if>
+    </#list>
         </where>
     </select>
 
@@ -70,39 +70,39 @@
         select count(1)
         from <#if scheme=true>`${table.scheme}`.</#if>${table.name}
         <where>
-<#list entity.fields as attr>
-    <#if attr.fullJavaType == "java.lang.String">
-        <if test="${attr.field} != null and ${attr.field} != ''">
-            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
-        </if>
-    <#else>
-        <if test="${attr.field} != null">
-            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
-        </if>
-    </#if>
-</#list>
+    <#list entity.fields as attr>
+        <#if attr.fullJavaType == "java.lang.String">
+            <if test="${attr.field} != null and ${attr.field} != ''">
+                and ${attr.name} = <#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse>
+            </if>
+        <#else>
+            <if test="${attr.field} != null">
+                and ${attr.name} = <#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse>
+            </if>
+        </#if>
+    </#list>
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="${entity.primary.field}" useGeneratedKeys="true">
         insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr>${attr.name}<#if attr_has_next>,</#if></#list>)
-        values (<#list entity.fields as attr><#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#list>)
+        values (<#list entity.fields as attr><#if !attr.primary><#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#if></#list>)
     </insert>
 
     <insert id="insertBatch" keyProperty="${entity.primary.field}" useGeneratedKeys="true">
-        insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr>${attr.name}<#if attr_has_next>,</#if></#list>)
+        insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr><#if !attr.primary>${attr.name}<#if attr_has_next>,</#if></#if></#list>)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (<#list entity.fields as attr><#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#list>)
+            (<#list entity.fields as attr><#if !attr.primary><#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#if></#list>)
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="${entity.primary.field}" useGeneratedKeys="true">
-        insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr>${attr.name}<#if attr_has_next>,</#if></#list>)
+        insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr><#if !attr.primary>${attr.name}<#if attr_has_next>,</#if></#if></#list>)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (<#list entity.fields as attr><#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#list>)
+            (<#list entity.fields as attr><#if !attr.primary><#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#if></#list>)
         </foreach>
         on duplicate key update
     <#list entity.fields as attr>
@@ -114,17 +114,19 @@
     <update id="update">
         update <#if scheme=true>`${table.scheme}`.</#if>${table.name}
         <set>
-<#list entity.fields as attr>
-    <#if attr.fullJavaType == "java.lang.String">
-        <if test="${attr.field} != null and ${attr.field} != ''">
-            ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>,
-        </if>
-    <#else>
-        <if test="${attr.field} != null">
-            and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>,
-        </if>
+    <#list entity.fields as attr>
+    <#if !attr.primary>
+        <#if attr.fullJavaType == "java.lang.String">
+            <if test="${attr.field} != null and ${attr.field} != ''">
+                ${attr.name} = <#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse>,
+            </if>
+        <#else>
+            <if test="${attr.field} != null">
+                and ${attr.name} = <#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse>,
+            </if>
+        </#if>
     </#if>
-</#list>
+    </#list>
         </set>
         where ${entity.primary.name} = <#noparse>#{</#noparse>${entity.primary.field}<#noparse>}</#noparse>
     </update>

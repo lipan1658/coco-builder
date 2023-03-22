@@ -1,7 +1,7 @@
 package ${controller.packageName};
 
 import ${service.interfaceFullName};
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本] （可选）
  */
-@Controller
+@RestController
 public class ${controller.name} {
 
     @Autowired
