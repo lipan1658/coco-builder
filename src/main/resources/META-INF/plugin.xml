@@ -22,6 +22,11 @@
 
 
     <change-notes><![CDATA[
+        <h2>0.0.2</h2>
+        <ul>
+            <li>Modify Template File.</li>
+            <li>Add the function of generating entity classes from simple SQL</li>
+        </ul>
         <h2>0.0.1</h2>
         <ul>
             <li>Generate code from template.</li>
