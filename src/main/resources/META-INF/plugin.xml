@@ -22,6 +22,10 @@
 
 
     <change-notes><![CDATA[
+        <h2>0.0.3</h2>
+        <ul>
+            <li>Fix errors in the generated xml file.</li>
+        </ul>
         <h2>0.0.2</h2>
         <ul>
             <li>Modify Template File.</li>

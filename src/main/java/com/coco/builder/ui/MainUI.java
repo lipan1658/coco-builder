@@ -290,7 +290,9 @@ public class MainUI extends JDialog {
         entityModel.setFields(entityFieldModelList);
         Set<String> jdbcTypeSet = new HashSet<>();
         entityFieldModelList.forEach(o->{
-            jdbcTypeSet.add(o.getFullJavaType());
+            if(!o.getFullJavaType().contains("java.lang")){
+                jdbcTypeSet.add(o.getFullJavaType());
+            }
         });
         entityModel.setJavaTypeSet(jdbcTypeSet);
         for (EntityFieldModel fieldModel : entityFieldModelList) {
@@ -303,7 +305,7 @@ public class MainUI extends JDialog {
         daoModel.setName(baseClassName + daoClassText.getText());
         daoModel.setPackageName(basePackage + "." + daoPackageText.getText());
         daoModel.setFullName(daoModel.getPackageName() + "." + daoModel.getName());
-        daoModel.setTypeName(daoPackageText.getText());
+        daoModel.setTypeName(daoClassText.getText());
 
         ServiceModel serviceModel = new ServiceModel();
         serviceModel.setName(baseClassName + "ServiceImpl");
@@ -332,6 +334,7 @@ public class MainUI extends JDialog {
         dataMap.put("service",serviceModel);
         dataMap.put("scheme",schemeCheckBox.isSelected());
         dataMap.put("swagger",swaggerCheckBox.isSelected());
+        dataMap.put("author",System.getenv("USERNAME"));
         String filePath;
         String fileName;
 

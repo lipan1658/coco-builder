@@ -86,7 +86,7 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="${entity.primary.field}" useGeneratedKeys="true">
-        insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr>${attr.name}<#if attr_has_next>,</#if></#list>)
+        insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr><#if !attr.primary>${attr.name}<#if attr_has_next>,</#if></#if></#list>)
         values (<#list entity.fields as attr><#if !attr.primary><#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#if></#list>)
     </insert>
 
