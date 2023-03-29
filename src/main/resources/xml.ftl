@@ -30,7 +30,7 @@
         <where>
     <#list entity.fields as attr>
         <#if attr.fullJavaType == "java.lang.String">
-            <if test="${attr.field} != null and test=${attr.field} != ''">
+            <if test="${attr.field} != null and ${attr.field} != ''">
                 and ${attr.name} = <#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse>
             </if>
         <#else>
@@ -122,7 +122,7 @@
             </if>
         <#else>
             <if test="${attr.field} != null">
-                and ${attr.name} = <#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse>,
+                ${attr.name} = <#noparse>#{</#noparse>${attr.field}<#noparse>}</#noparse>,
             </if>
         </#if>
     </#if>
