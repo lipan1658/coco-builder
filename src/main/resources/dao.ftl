@@ -6,11 +6,8 @@ import java.util.List;
 
 /**
  *  ${table.comment!""}${dao.typeName}
- * 〈功能详细描述〉
  *
- * @author xxxxx
- * @see [相关类/方法]（可选）
- * @since [产品/模块版本] （可选）
+ * @author ${author}
  */
 public interface ${dao.name} {
 
@@ -51,7 +48,7 @@ public interface ${dao.name} {
     /**
     * 新增数据
     *
-    * @param ${entity.name?uncap_first}) 实例对象
+    * @param ${entity.name?uncap_first} 实例对象
     * @return 影响行数
     */
     int insert(${entity.name} ${entity.name?uncap_first});
