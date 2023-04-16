@@ -11,6 +11,7 @@ import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.SelectBody;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +38,11 @@ public class SqlParserUtil {
             if(!StringUtils.isEmpty(sqlCol.getTableName())){
                 String tableName = getTableName(sqlCol,tabSet);
                 sqlCol.setTableName(tableName);
+            }else{
+                Iterator<SqlTab> iterator = tabSet.iterator();
+                if(iterator.hasNext()){
+                    sqlCol.setTableName(iterator.next().getName());
+                }
             }
         }
         return sqlData;

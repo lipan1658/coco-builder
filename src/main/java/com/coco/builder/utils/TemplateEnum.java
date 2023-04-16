@@ -7,7 +7,8 @@ public enum TemplateEnum {
     SERVICEIMPL("serviceImpl","serviceImpl.ftl"),
     CONTROLLER("controller","controller.ftl"),
     XML("xml","xml.ftl"),
-    DTO("dto","dto.ftl")
+    DTO("dto","dto.ftl"),
+    RESULTMAP("resultMap","resultMap.ftl")
     ;
 
     private String code;

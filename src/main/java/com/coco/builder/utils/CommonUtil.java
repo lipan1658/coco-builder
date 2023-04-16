@@ -19,6 +19,9 @@ public class CommonUtil {
     private static final Pattern linePattern = Pattern.compile("_(\\w)");
 
     public static String lineToHump(String str) {
+        if(!str.contains("_")){
+            return str;
+        }
         str = str.toLowerCase();
         Matcher matcher = linePattern.matcher(str);
         StringBuilder builder = new StringBuilder();
