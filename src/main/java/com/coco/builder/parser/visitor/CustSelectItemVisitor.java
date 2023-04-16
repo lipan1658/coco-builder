@@ -6,6 +6,7 @@ import com.coco.builder.parser.sql.SqlThreadLocal;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.SelectBody;
 import net.sf.jsqlparser.statement.select.SelectExpressionItem;
 import net.sf.jsqlparser.statement.select.SelectItemVisitorAdapter;
@@ -33,13 +34,14 @@ public class CustSelectItemVisitor extends SelectItemVisitorAdapter {
         Alias alias = item.getAlias();
         String aliasName;
         String columnName;
-        String tableName;
         Expression expression = item.getExpression();
         if (expression instanceof Column) {
-            columnName = ((Column) expression).getColumnName();
-            tableName = ((Column) expression).getTable().getName();
             SqlCol col = new SqlCol();
-            col.setTableName(tableName);
+            columnName = ((Column) expression).getColumnName();
+            Table table = ((Column) expression).getTable();
+            if(table != null){
+                col.setTableName(table.getName());
+            }
             if(sqlData.getCurrCol() !=null){
                 aliasName = sqlData.getCurrCol().getAlias();
                 col.setAlias(aliasName);
