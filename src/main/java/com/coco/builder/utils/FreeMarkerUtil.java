@@ -20,11 +20,11 @@ import java.util.Map;
  */
 public class FreeMarkerUtil {
 
-    public static void createFile(String templateName, TemplateEnum templateEnum, String filePath, String fileName, Map<String, Object> dataMap) throws IOException {
+    public static void createFile(TemplateEnum templateEnum, String filePath, String fileName, Map<String, Object> dataMap) throws IOException {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
         URL resource = FreeMarkerUtil.class.getClassLoader().getResource(templateEnum.getName());
         assert resource != null;
-        Template template = new Template(templateName, new StringReader(UrlUtil.loadText(resource)), configuration);
+        Template template = new Template(templateEnum.getName(), new StringReader(UrlUtil.loadText(resource)), configuration);
         createFile(template, filePath, fileName, dataMap);
     }
 
@@ -39,6 +39,15 @@ public class FreeMarkerUtil {
         } catch (TemplateException | IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public static String parse(TemplateEnum templateEnum, Map<String, Object> dataMap) throws IOException, TemplateException {
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_0);
+        URL resource = FreeMarkerUtil.class.getClassLoader().getResource(templateEnum.getName());
+        assert resource != null;
+        Template template = new Template(templateEnum.getName(), new StringReader(UrlUtil.loadText(resource)), configuration);
+        StringWriter stringWriter = new StringWriter();
+        template.process(dataMap, stringWriter);
+        return stringWriter.toString();
     }
 }

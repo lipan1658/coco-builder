@@ -286,15 +286,7 @@ public class MainUI extends JDialog {
         EntityModel entityModel = new EntityModel();
         entityModel.setName(baseClassName + "Entity");
         entityModel.setPackageName(basePackage + ".entity");
-        entityModel.setFullName(entityModel.getPackageName() + "." + entityModel.getName());
-        entityModel.setFields(entityFieldModelList);
-        Set<String> jdbcTypeSet = new HashSet<>();
-        entityFieldModelList.forEach(o->{
-            if(!o.getFullJavaType().contains("java.lang")){
-                jdbcTypeSet.add(o.getFullJavaType());
-            }
-        });
-        entityModel.setJavaTypeSet(jdbcTypeSet);
+        setFields(entityFieldModelList, entityModel);
         for (EntityFieldModel fieldModel : entityFieldModelList) {
             if(fieldModel.isPrimary()){
                 entityModel.setPrimary(fieldModel);
@@ -342,7 +334,7 @@ public class MainUI extends JDialog {
             filePath = javaPath+"\\"+"entity";
             fileName = entityModel.getName()+".java";
             try {
-                FreeMarkerUtil.createFile("entity", TemplateEnum.ENTITY,filePath, fileName, dataMap);
+                FreeMarkerUtil.createFile(TemplateEnum.ENTITY,filePath, fileName, dataMap);
             } catch (IOException e ) {
                 Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
                 return;
@@ -352,7 +344,7 @@ public class MainUI extends JDialog {
             filePath = xmlPath;
             fileName = baseClassName+"Mapper.xml";
             try {
-                FreeMarkerUtil.createFile("xml", TemplateEnum.XML,filePath, fileName, dataMap);
+                FreeMarkerUtil.createFile(TemplateEnum.XML,filePath, fileName, dataMap);
             } catch (IOException e) {
                 Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
                 return;
@@ -362,7 +354,7 @@ public class MainUI extends JDialog {
             filePath = javaPath+"\\"+daoPackageText.getText();
             fileName = daoModel.getName()+".java";
             try {
-                FreeMarkerUtil.createFile("dao", TemplateEnum.DAO,filePath, fileName, dataMap);
+                FreeMarkerUtil.createFile(TemplateEnum.DAO,filePath, fileName, dataMap);
             } catch (IOException e) {
                 Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
                 return;
@@ -373,10 +365,10 @@ public class MainUI extends JDialog {
             filePath = javaPath+"\\"+"service";
             fileName = baseClassName+"Service.java";
             try {
-                FreeMarkerUtil.createFile("service", TemplateEnum.SERVICE,filePath, fileName, dataMap);
+                FreeMarkerUtil.createFile(TemplateEnum.SERVICE,filePath, fileName, dataMap);
                 filePath = javaPath+"\\"+"service\\impl";
                 fileName = baseClassName+"ServiceImpl.java";
-                FreeMarkerUtil.createFile("serviceimpl", TemplateEnum.SERVICEIMPL,filePath, fileName, dataMap);
+                FreeMarkerUtil.createFile(TemplateEnum.SERVICEIMPL,filePath, fileName, dataMap);
             } catch (IOException e) {
                 Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
                 return;
@@ -386,12 +378,24 @@ public class MainUI extends JDialog {
             filePath = javaPath+"\\"+"controller";
             fileName = baseClassName+"Controller.java";
             try {
-                FreeMarkerUtil.createFile("controller", TemplateEnum.CONTROLLER,filePath, fileName, dataMap);
+                FreeMarkerUtil.createFile(TemplateEnum.CONTROLLER,filePath, fileName, dataMap);
             } catch (IOException e) {
                 Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
             }
         }
         dispose();
+    }
+
+    private void setFields(List<EntityFieldModel> entityFieldModelList, EntityModel entityModel) {
+        entityModel.setFullName(entityModel.getPackageName() + "." + entityModel.getName());
+        entityModel.setFields(entityFieldModelList);
+        Set<String> jdbcTypeSet = new HashSet<>();
+        entityFieldModelList.forEach(o->{
+            if(!o.getFullJavaType().contains("java.lang")){
+                jdbcTypeSet.add(o.getFullJavaType());
+            }
+        });
+        entityModel.setJavaTypeSet(jdbcTypeSet);
     }
 
 }

@@ -38,15 +38,17 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.util.containers.JBIterable;
 import com.intellij.util.ui.JBUI;
+import freemarker.template.TemplateException;
 import net.sf.jsqlparser.JSQLParserException;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.jps.model.java.JavaResourceRootType;
 import org.jetbrains.jps.model.java.JavaSourceRootType;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 
@@ -71,7 +73,10 @@ public class SqlDialog extends JDialog{
     private final ComboBox<String> moduleComboBox = new ComboBox<>();
     private final JLabel javaPathLabel = new JLabel("java path");
     private final TextFieldWithBrowseButton javaPathText = new TextFieldWithBrowseButton();
-    private final JLabel entityNameLabel = new JLabel("entity");
+
+    private final JLabel xmlNameLabel = new JLabel("xml file name");
+    private final TextFieldWithBrowseButton xmlPathText = new TextFieldWithBrowseButton();
+    private final JLabel entityNameLabel = new JLabel("entity name");
     private final JTextField entityNameText = new JTextField();
 
 
@@ -141,6 +146,10 @@ public class SqlDialog extends JDialog{
     }
 
     private void onOk() {
+        if(StringUtils.isBlank(entityNameText.getText())){
+            Messages.showMessageDialog("Please enter entity name", "Notice", Messages.getInformationIcon());
+            return;
+        }
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         int rowCount = model.getRowCount();
         Vector<Vector> dataVector = model.getDataVector();
@@ -163,21 +172,54 @@ public class SqlDialog extends JDialog{
         EntityModel entityModel = new EntityModel();
         entityModel.setName(entityNameText.getText());
         entityModel.setPackageName(basePackage);
+        setFields(entityFieldModelList, entityModel);
+        Map<String,Object> dataMap = new HashMap<>();
+        dataMap.put("entity",entityModel);
+        dataMap.put("swagger",true);
+        dataMap.put("author",System.getenv("USERNAME"));
+        String fileName = entityModel.getName()+".java";
+        FileInputStream fileInputStream = null;
+        RandomAccessFile randomAccessFile = null;
+        try {
+            FreeMarkerUtil.createFile(TemplateEnum.DTO, javaPath, fileName, dataMap);
+            fileInputStream = new FileInputStream(xmlPathText.getText());
+            int available = fileInputStream.available();
+            randomAccessFile = new RandomAccessFile(xmlPathText.getText(),"rw");
+            randomAccessFile.seek((available-10));
+            String resultMapStr = FreeMarkerUtil.parse(TemplateEnum.RESULTMAP, dataMap);
+            randomAccessFile.writeBytes(resultMapStr+"\r\n\r\n</mapper>");
+        } catch (IOException | TemplateException e  ) {
+            Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
+        } finally {
+            if(fileInputStream!=null){
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(randomAccessFile != null){
+                try {
+                    randomAccessFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+    }
+
+    private void setFields(List<EntityFieldModel> entityFieldModelList, EntityModel entityModel) {
         entityModel.setFullName(entityModel.getPackageName() + "." + entityModel.getName());
         entityModel.setFields(entityFieldModelList);
         Set<String> jdbcTypeSet = new HashSet<>();
         entityFieldModelList.forEach(obj->{
-            jdbcTypeSet.add(obj.getFullJavaType());
+            if(!obj.getFullJavaType().contains("java.lang")){
+                jdbcTypeSet.add(obj.getFullJavaType());
+            }
         });
         entityModel.setJavaTypeSet(jdbcTypeSet);
-        Map<String,Object> dataMap = new HashMap<>();
-        dataMap.put("entity",entityModel);
-        String fileName = entityModel.getName()+".java";
-        try {
-            FreeMarkerUtil.createFile("dto", TemplateEnum.DTO, javaPath, fileName, dataMap);
-        } catch (IOException e ) {
-            Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
-        }
     }
 
     private void createSqlPanel(Project project){
@@ -213,6 +255,7 @@ public class SqlDialog extends JDialog{
     private void createTablePanel(AnActionEvent event,Project project) throws JSQLParserException {
         ModuleManager moduleManager = ModuleManager.getInstance(project);
         Module[] modules = moduleManager.getModules();
+        moduleComboBox.removeAllItems();
         for (Module module : modules) {
             moduleComboBox.addItem(module.getName());
         }
@@ -233,19 +276,18 @@ public class SqlDialog extends JDialog{
                 }else{
                     javaPathText.setText("");
                 }
+                List<VirtualFile> resourceRoots = instance.getSourceRoots(JavaResourceRootType.RESOURCE);
+                if (resourceRoots.size() > 0) {
+                    xmlPathText.setText(resourceRoots.get(0).getPath().replace("/", "\\"));
+                }
             }
         });
         moduleComboBox.setSelectedIndex(0);
 
         tablePanel = new JPanel(new BorderLayout());
-        JPanel entityPanel = new JPanel(new GridLayout(1,6));
-        entityPanel.setBorder(JBUI.Borders.empty(10));
-        entityPanel.setPreferredSize(new Dimension(700,50));
         moduleNameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        entityPanel.add(moduleNameLabel);
-        entityPanel.add(moduleComboBox);
-        javaPathLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        entityPanel.add(javaPathLabel);
+
+
         ModuleRootManager instance = ModuleRootManager.getInstance(modules[0]);
         List<VirtualFile> sourceRoots = instance.getSourceRoots(JavaSourceRootType.SOURCE);
         if (sourceRoots.size() > 0) {
@@ -263,13 +305,47 @@ public class SqlDialog extends JDialog{
                 }
             }
         });
-        entityPanel.add(javaPathText);
+
+        List<VirtualFile> resourceRoots = instance.getSourceRoots(JavaResourceRootType.RESOURCE);
+        if (resourceRoots.size() > 0) {
+            xmlPathText.setText(resourceRoots.get(0).getPath().replace("/", "\\"));
+        }
+        xmlPathText.addBrowseFolderListener(new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFileOrFolderDescriptor(), project) {
+            @Override
+            protected void onFileChosen(@NotNull VirtualFile chosenFile) {
+                if (!chosenFile.isDirectory()) {
+                    xmlPathText.setText(chosenFile.getPath().replace("/", "\\"));
+                } else {
+                    Messages.showMessageDialog("Please select a file", "Notice", Messages.getInformationIcon());
+                }
+            }
+        });
+
+        JPanel entityParent = new JPanel();
+        JPanel entityPanel = new JPanel(new GridLayout(2,4));
+        entityPanel.setBorder(JBUI.Borders.empty(10));
+        entityPanel.setPreferredSize(new Dimension(600,80));
+        //module
+        entityPanel.add(moduleNameLabel);
+        entityPanel.add(moduleComboBox);
+        //entity
         entityNameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         entityPanel.add(entityNameLabel);
         entityNameText.setHorizontalAlignment(SwingConstants.LEFT);
         entityPanel.add(entityNameText);
 
-        tablePanel.add(entityPanel, BorderLayout.NORTH);
+        //java path
+        javaPathLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        entityPanel.add(javaPathLabel);
+        entityPanel.add(javaPathText);
+        //xml path
+        xmlNameLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        entityPanel.add(xmlNameLabel);
+        entityPanel.add(xmlPathText);
+
+
+        entityParent.add(entityPanel);
+        tablePanel.add(entityParent, BorderLayout.NORTH);
 
 
         PsiElement[] psiElements = event.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
@@ -345,7 +421,6 @@ public class SqlDialog extends JDialog{
             javaTypeName = sqlCol.getJavaType().getCanonicalName();
             comment = "";
         }
-
 
         return new String[]{filedName, columnName, jdbcTypeName,javaTypeName, comment};
     }
