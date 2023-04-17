@@ -178,26 +178,16 @@ public class SqlDialog extends JDialog{
         dataMap.put("swagger",true);
         dataMap.put("author",System.getenv("USERNAME"));
         String fileName = entityModel.getName()+".java";
-        FileInputStream fileInputStream = null;
         RandomAccessFile randomAccessFile = null;
         try {
             FreeMarkerUtil.createFile(TemplateEnum.DTO, javaPath, fileName, dataMap);
-            fileInputStream = new FileInputStream(xmlPathText.getText());
-            int available = fileInputStream.available();
             randomAccessFile = new RandomAccessFile(xmlPathText.getText(),"rw");
-            randomAccessFile.seek((available-10));
+            randomAccessFile.seek((randomAccessFile.length()-10));
             String resultMapStr = FreeMarkerUtil.parse(TemplateEnum.RESULTMAP, dataMap);
             randomAccessFile.writeBytes(resultMapStr+"\r\n\r\n</mapper>");
         } catch (IOException | TemplateException e  ) {
             Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
         } finally {
-            if(fileInputStream!=null){
-                try {
-                    fileInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
             if(randomAccessFile != null){
                 try {
                     randomAccessFile.close();
