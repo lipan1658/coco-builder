@@ -105,9 +105,11 @@
             (<#list entity.fields as attr><#if !attr.primary><#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#if></#list>)
         </foreach>
         on duplicate key update
-    <#list entity.fields as attr>
+<#list entity.fields as attr>
+    <#if !attr.primary>
         ${attr.name} = values(${attr.name})<#if attr_has_next>,</#if>
-    </#list>
+    </#if>
+</#list>
     </insert>
 
     <!--通过主键修改数据-->
