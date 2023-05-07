@@ -99,15 +99,17 @@
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="${entity.primary.field}" useGeneratedKeys="true">
-        insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr><#if !attr.primary>${attr.name}<#if attr_has_next>,</#if></#if></#list>)
+        insert into <#if scheme=true>`${table.scheme}`.</#if>${table.name}(<#list entity.fields as attr>${attr.name}<#if attr_has_next>,</#if></#list>)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (<#list entity.fields as attr><#if !attr.primary><#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#if></#list>)
+            (<#list entity.fields as attr><#noparse>#{entity.</#noparse>${attr.field}<#noparse>}</#noparse><#if attr_has_next>,</#if></#list>)
         </foreach>
         on duplicate key update
-    <#list entity.fields as attr>
+<#list entity.fields as attr>
+    <#if !attr.primary>
         ${attr.name} = values(${attr.name})<#if attr_has_next>,</#if>
-    </#list>
+    </#if>
+</#list>
     </insert>
 
     <!--通过主键修改数据-->

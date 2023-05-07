@@ -36,4 +36,14 @@ public enum TemplateEnum {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static TemplateEnum getByName(String name){
+        TemplateEnum[] values = TemplateEnum.values();
+        for (TemplateEnum value : values) {
+            if(name.equals(value.getName())){
+                return value;
+            }
+        }
+        return null;
+    }
 }

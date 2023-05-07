@@ -47,6 +47,8 @@ dependencies {
     implementation("org.freemarker:freemarker:2.3.32")
     implementation("org.jetbrains:marketplace-zip-signer:0.1.8")
     implementation("com.github.jsqlparser:jsqlparser:4.6")
+    // https://mvnrepository.com/artifact/org.dom4j/dom4j
+    implementation("org.dom4j:dom4j:2.1.4")
 
 
 
