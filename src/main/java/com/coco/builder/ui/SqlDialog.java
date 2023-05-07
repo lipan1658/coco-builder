@@ -181,20 +181,9 @@ public class SqlDialog extends JDialog{
         RandomAccessFile randomAccessFile = null;
         try {
             FreeMarkerUtil.createFile(TemplateEnum.DTO, javaPath, fileName, dataMap);
-            randomAccessFile = new RandomAccessFile(xmlPathText.getText(),"rw");
-            randomAccessFile.seek((randomAccessFile.length()-10));
-            String resultMapStr = FreeMarkerUtil.parse(TemplateEnum.RESULTMAP, dataMap);
-            randomAccessFile.writeBytes(resultMapStr+"\r\n\r\n</mapper>");
-        } catch (IOException | TemplateException e  ) {
+            FreeMarkerUtil.appendToXml(TemplateEnum.RESULTMAP, dataMap, xmlPathText.getText());
+        } catch (IOException e  ) {
             Messages.showErrorDialog(e.getLocalizedMessage(),"Error");
-        } finally {
-            if(randomAccessFile != null){
-                try {
-                    randomAccessFile.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
 
