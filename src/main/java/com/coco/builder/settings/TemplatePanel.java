@@ -97,6 +97,9 @@ public class TemplatePanel extends JPanel{
         Map<String, String> map = instance.getMap();
         Project project = ProjectManager.getInstance().getDefaultProject();
         EditorFactory editorFactory = EditorFactory.getInstance();
+        if(editor != null){
+            editorFactory.releaseEditor(editor);
+        }
         String contentText = map.get(templateEnum.getName());
         LightVirtualFile virtualFile = new LightVirtualFile(templateEnum.getName(), contentText);
         virtualFile.putUserData(FileTemplateManager.DEFAULT_TEMPLATE_PROPERTIES, FileTemplateManager.getInstance(project).getDefaultProperties());
