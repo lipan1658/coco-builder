@@ -1,5 +1,8 @@
 package com.coco.builder.settings;
 
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.editor.EditorFactory;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,7 +14,7 @@ import java.awt.*;
  * @description TODO
  * @date 2023/5/6 6:35
  */
-public class AppSettingsComponent {
+public class AppSettingsComponent implements Disposable {
 
     private final JPanel myMainPanel;
 
@@ -27,7 +30,13 @@ public class AppSettingsComponent {
         return myMainPanel;
     }
 
+
     public TemplatePanel getTemplatePanel() {
         return templatePanel;
+    }
+
+    @Override
+    public void dispose() {
+        EditorFactory.getInstance().releaseEditor(templatePanel.getEditor());
     }
 }

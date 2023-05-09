@@ -40,7 +40,7 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.database</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable parentId="tools" instance="com.coco.builder.settings.AppSettingsConfigurable"
+        <applicationConfigurable instance="com.coco.builder.settings.AppSettingsConfigurable"
                                  id="com.coco.builder.settings.AppSettingsConfigurable"
                                  displayName="Coco Builder"/>
         <applicationService serviceImplementation="com.coco.builder.settings.AppSettingsState"/>

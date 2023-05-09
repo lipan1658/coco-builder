@@ -72,7 +72,7 @@ public interface ${dao.name} {
     /**
     * 修改数据
     *
-    * @param ${entity.name?uncap_first}) 实例对象
+    * @param ${entity.name?uncap_first} 实例对象
     * @return 影响行数
     */
     int update(${entity.name} ${entity.name?uncap_first});
