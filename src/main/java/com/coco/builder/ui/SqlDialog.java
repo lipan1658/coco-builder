@@ -178,7 +178,6 @@ public class SqlDialog extends JDialog{
         dataMap.put("swagger",true);
         dataMap.put("author",System.getenv("USERNAME"));
         String fileName = entityModel.getName()+".java";
-        RandomAccessFile randomAccessFile = null;
         try {
             FreeMarkerUtil.createFile(TemplateEnum.DTO, javaPath, fileName, dataMap);
             FreeMarkerUtil.appendToXml(TemplateEnum.RESULTMAP, dataMap, xmlPathText.getText());

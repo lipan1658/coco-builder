@@ -6,6 +6,7 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.NlsContexts;
 import com.intellij.ui.components.JBList;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +24,7 @@ import java.util.Map;
  */
 public class AppSettingsConfigurable implements Configurable {
 
-    private final AppSettingsComponent appSettingsComponent = new AppSettingsComponent();;
+    private AppSettingsComponent appSettingsComponent;
 
     @Override
     public @NlsContexts.ConfigurableName String getDisplayName() {
@@ -32,6 +33,7 @@ public class AppSettingsConfigurable implements Configurable {
 
     @Override
     public @Nullable JComponent createComponent() {
+        appSettingsComponent = new AppSettingsComponent();
         return appSettingsComponent.getMyMainPanel();
     }
 
@@ -43,7 +45,10 @@ public class AppSettingsConfigurable implements Configurable {
         Editor editor = templatePanel.getEditor();
         JBList<String> jbList = templatePanel.getJbList();
         Document document = editor.getDocument();
-        return map.get(jbList.getSelectedValue())== null || !map.get(jbList.getSelectedValue()).equals(document.getText());
+        if(map.get(jbList.getSelectedValue())== null ){
+            return false;
+        }
+        return !map.get(jbList.getSelectedValue()).equals(document.getText());
     }
 
     @Override
@@ -63,9 +68,17 @@ public class AppSettingsConfigurable implements Configurable {
         Map<String, String> map = instance.getMap();
         TemplatePanel templatePanel = appSettingsComponent.getTemplatePanel();
         String selectedItem = templatePanel.getSelectedItem();
-        TemplateEnum templateEnum = TemplateEnum.getByName(selectedItem);
-        assert templateEnum != null;
-        map.put(selectedItem,FreeMarkerUtil.getText(templateEnum));
-        templatePanel.addTemplateContent(templateEnum);
+        if(selectedItem!=null){
+            TemplateEnum templateEnum = TemplateEnum.getByName(selectedItem);
+            assert templateEnum != null;
+            map.put(selectedItem,FreeMarkerUtil.getText(templateEnum));
+            templatePanel.setContent(templateEnum);
+        }
     }
+
+    @Override
+    public void disposeUIResources() {
+        Disposer.dispose(appSettingsComponent);
+    }
+
 }

@@ -2,7 +2,7 @@ package com.coco.builder.utils;
 
 import com.coco.builder.model.EntityModel;
 import com.intellij.ide.fileTemplates.impl.UrlUtil;
-import com.vladsch.flexmark.util.misc.TemplateUtil;
+import com.intellij.openapi.util.text.StringUtilRt;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -73,7 +73,7 @@ public class FreeMarkerUtil {
             xmlWriter = new XMLWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
             xmlWriter.write(targetDocument);
         } catch (TemplateException | IOException | DocumentException e) {
-            throw new RuntimeException("生产xml文件失败",e);
+            throw new RuntimeException("生成xml文件失败",e);
         } finally {
             if(xmlWriter != null){
                 try {
@@ -140,7 +140,7 @@ public class FreeMarkerUtil {
         URL resource = FreeMarkerUtil.class.getClassLoader().getResource(templateEnum.getName());
         try {
             assert resource != null;
-            return UrlUtil.loadText(resource);
+            return StringUtilRt.convertLineSeparators(UrlUtil.loadText(resource));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
